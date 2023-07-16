@@ -1,0 +1,447 @@
+/***** Custom Scrollbar mixin *****/
+@mixin scrollbars(
+  $size,
+  $foreground-color,
+  $background-color: mix($foreground-color, white, 50%)
+) {
+  // For Google Chrome
+  &::-webkit-scrollbar {
+    width: $size;
+    height: $size;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $foreground-color;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $background-color;
+  }
+
+  // For Internet Explorer
+  & {
+    scrollbar-face-color: $foreground-color;
+    scrollbar-track-color: $background-color;
+  }
+}
+
+/* === Fonts === */
+@font-face {
+  font-family: "Libre Caslon Text";
+  src: url("../fonts/LibreCaslonText.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("../fonts/Montserrat.woff2") format("woff2");
+}
+
+/* ===============
+   GLOBAL SETTINGS 
+   =============== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --title-font: "Libre Caslon Text", serif;
+  --body-font: "Montserrat", sans-serif;
+  --bg-gray-800: #2d3748;
+  --bg-gray-900: #1a212d;
+  --bg-gray-1000: #131720;
+  --bg-teal-500: #38b2ac;
+}
+
+// Smooth Scrolling with CSS
+html {
+  scroll-behavior: smooth;
+}
+body {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  @include scrollbars(10px, var(--bg-teal-500), var(--bg-gray-900));
+}
+
+a {
+  cursor: pointer;
+}
+section {
+  overflow: hidden;
+  scroll-snap-type: y mandatory;
+  > * {
+    scroll-snap-align: start;
+  }
+}
+
+/* Typography
+   ============================= */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.title-font {
+  font-family: var(--title-font);
+}
+
+p,
+span,
+input,
+input::placeholder,
+.body-font {
+  font-family: var(--body-font);
+}
+.current {
+  color: white;
+}
+
+/***** Section Titles *****/
+.title {
+  position: relative;
+  z-index: 0;
+  &::before,
+  &::after {
+    position: absolute;
+    content: "";
+    background-color: var(--bg-teal-500);
+    z-index: -1;
+    transition: transform 1s ease-in-out, opacity 0.5s ease-in-out;
+    transition-delay: 0.5s;
+    opacity: 0;
+  }
+  &::before {
+    width: 125px;
+    height: 6px;
+    bottom: 36px;
+    transform: translateX(-100px);
+  }
+  &::after {
+    width: 125px;
+    height: 50%;
+    transform: translateX(100px);
+  }
+}
+
+/***** Responsive mobile menu *****/
+nav.mobile-menu {
+  display: flex;
+  position: absolute;
+  top: 90px;
+  left: 0;
+  background-color: var(--bg-gray-1000);
+  flex-direction: column;
+  width: 100%;
+  animation: slideIn 0.2s linear forwards;
+
+  @keyframes slideIn {
+    0% {
+      opacity: 0;
+      transform: translateY(-50px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  a {
+    padding: 10px 0;
+  }
+}
+
+/***** Splitting animation *****/
+.splitting {
+  overflow: hidden;
+  .char {
+    opacity: 1;
+    transition: transform 0.2s cubic-bezier(0.3, 0, 0.3, 1), opacity 0.3s linear;
+    transition-delay: calc(20ms * var(--char-index));
+  }
+
+  &[data-scroll="out"] .char {
+    opacity: 0;
+    transform: translateY(2em);
+  }
+}
+
+// Scrolling to top
+.scrollToTop {
+  opacity: 0;
+  height: 30px;
+  width: 30px;
+  bottom: 30px;
+  right: 20px;
+  background-color: var(--bg-teal-500);
+  transform: translateY(50px);
+  transition: transform 0.3s ease-in-out;
+  stroke: white;
+  &.slideUp {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+/***** Sliding animations *****/
+
+.slideLeft-animate,
+.slideUp-animate,
+.slideRight-animate {
+  opacity: 0;
+  transition: transform 0.7s ease-in-out, opacity 0.4s ease-in-out;
+}
+.slideLeft-animate {
+  transform: translateX(-50px);
+}
+.slideUp-animate {
+  transform: translateY(50px);
+}
+.slideRight-animate {
+  transform: translateX(50px);
+}
+.delay-100 {
+  transition-delay: 100ms;
+}
+.delay-150 {
+  transition-delay: 150ms;
+}
+.delay-200 {
+  transition-delay: 200ms;
+}
+.delay-300 {
+  transition-delay: 300ms;
+}
+.delay-400 {
+  transition-delay: 400ms;
+}
+.delay-500 {
+  transition-delay: 500ms;
+}
+.delay-600 {
+  transition-delay: 600ms;
+}
+.delay-700 {
+  transition-delay: 700ms;
+}
+.delay-800 {
+  transition-delay: 800ms;
+}
+[data-scroll] {
+  transition: opacity 1s;
+}
+[data-scroll="in"] {
+  opacity: 1;
+
+  /***** tittle class animation *****/
+  .title {
+    &::before,
+    &::after {
+      opacity: 1;
+    }
+    &::before {
+      transform: translateX(-25px);
+    }
+    &::after {
+      transform: translateX(-100px);
+    }
+  }
+
+  .slideUp-animate,
+  .slideLeft-animate,
+  .slideRight-animate {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+[data-scroll="out"] {
+  .title {
+    &::before,
+    &::after {
+      opacity: 0;
+    }
+    &::before {
+      transform: translateX(-100px);
+    }
+    &::after {
+      transform: translateX(100px);
+    }
+  }
+}
+
+// success message page
+.success-page-message {
+  overflow: hidden;
+  background-color: #1a202c;
+  color: #38b2ac;
+  display: grid;
+  place-content: center;
+  min-height: 100vh;
+  width: 100vw;
+  font-size: 24px;
+}
+
+// /* ==[ /* ==[ Page Loader ]== */
+.loader {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  background: aliceblue;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  background: #1a202c;
+  z-index: 999;
+}
+
+.loader.end {
+  width: 0;
+  height: 0;
+  -webkit-transform: scale(0);
+  transform: scale(0);
+  opacity: 0;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.windows8 {
+  position: relative;
+  width: 78px;
+  height: 78px;
+  margin: auto;
+}
+
+.windows8 .wBall {
+  position: absolute;
+  width: 74px;
+  height: 74px;
+  opacity: 0;
+  -webkit-transform: rotate(225deg);
+  transform: rotate(225deg);
+  -webkit-animation: orbit 6.96s infinite;
+  animation: orbit 6.96s infinite;
+}
+
+.windows8 .wBall .wInnerBall {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #38b2ac;
+  left: 0px;
+  top: 0px;
+  border-radius: 10px;
+}
+
+.windows8 #wBall_1 {
+  -webkit-animation-delay: 1.52s;
+  animation-delay: 1.52s;
+}
+
+.windows8 #wBall_2 {
+  -webkit-animation-delay: 0.3s;
+  animation-delay: 0.3s;
+}
+
+.windows8 #wBall_3 {
+  -webkit-animation-delay: 0.61s;
+  animation-delay: 0.61s;
+}
+
+.windows8 #wBall_4 {
+  -webkit-animation-delay: 0.91s;
+  animation-delay: 0.91s;
+}
+
+.windows8 #wBall_5 {
+  -webkit-animation-delay: 1.22s;
+  animation-delay: 1.22s;
+}
+
+@keyframes orbit {
+  0% {
+    opacity: 1;
+    z-index: 99;
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+  7% {
+    opacity: 1;
+    -webkit-transform: rotate(300deg);
+    transform: rotate(300deg);
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+    origin: 0%;
+  }
+  30% {
+    opacity: 1;
+    -webkit-transform: rotate(410deg);
+    transform: rotate(410deg);
+    -webkit-animation-timing-function: ease-in-out;
+    animation-timing-function: ease-in-out;
+    origin: 7%;
+  }
+  39% {
+    opacity: 1;
+    -webkit-transform: rotate(645deg);
+    transform: rotate(645deg);
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+    origin: 30%;
+  }
+  70% {
+    opacity: 1;
+    -webkit-transform: rotate(770deg);
+    transform: rotate(770deg);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+    origin: 39%;
+  }
+  75% {
+    opacity: 1;
+    -webkit-transform: rotate(900deg);
+    transform: rotate(900deg);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+    origin: 70%;
+  }
+  76% {
+    opacity: 0;
+    -webkit-transform: rotate(900deg);
+    transform: rotate(900deg);
+  }
+  100% {
+    opacity: 0;
+    -webkit-transform: rotate(900deg);
+    transform: rotate(900deg);
+  }
+}
+
+// this style is for logo svg only
+svg.logo_svg {
+  .cls-1 {
+    fill: #38b2ac;
+  }
+  .cls-2 {
+    fill: #fcfcfc;
+  }
+  .cls-3 {
+    fill: none;
+  }
+}
