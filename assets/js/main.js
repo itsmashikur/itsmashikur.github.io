@@ -59,11 +59,11 @@ window.onload = (e) => {
 
     if (fromTop > 0 && fromBottom > 700) {
 
-      body.classList.add("-skew-y-6");
+      body.classList.add("-skew-y-3");
       body.classList.add("md:scale-105");
 
     }else{
-      body.classList.remove("-skew-y-6");
+      body.classList.remove("-skew-y-3");
       body.classList.remove("md:scale-105");
     }
 
